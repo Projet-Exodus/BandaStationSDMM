@@ -1,5 +1,17 @@
 # SpacemanDMM
 
+Этот репозиторй - форк оригинального [SpacemanDMM](https://github.com/SpaceManiac/SpacemanDMM), с некоторыми модификациями [отсюда](https://github.com/AffectedArc07/ParaSpacemanDMM).
+Все модификации кода направлены на использование dmm-tools в качестве рендера внутриигровых карт.
+
+Отличия от оригинала:
+- Добавлено сжатие рендеров карт с помощью [oxipng](https://github.com/shssoichiro/oxipng).
+Благодаря этому, рендеры карт весят ~3мб вместо 30мб, при родном разрешении рендера (8160х8160).
+- Из генерации убрана большая часть объектов и все мобы. А так же некоторые турфы. При этом всё ещё разрешены двери и декали на полу.
+- Из модификации AA07 была взята возможность задавать кастомный размер рендера, с помощью аргументов `--w` и `--h`.
+- dmm-tools переименовывается в nanomap-renderer при создании релиза.
+
+<hr>
+
 **SpacemanDMM** is a suite of tools for working with [DreamMaker] codebases
 and map files. It features a full-size fancy map renderer, a [language server],
 and a documentation generator for DM codebases.
