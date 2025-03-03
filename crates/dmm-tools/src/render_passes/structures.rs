@@ -8,28 +8,27 @@ impl RenderPass for Spawners {
         objtree: &'a ObjectTree,
         output: &mut Vec<Atom<'a>>,
     ) -> bool {
-        if !atom.istype("/obj/effect/spawner/structure/") {
-            return true;
-        }
-        match atom.get_var("spawn_list", objtree) {
-            Constant::List(elements) => {
-                for (key, _) in elements.iter() {
-                    // TODO: use a more civilized lookup method
-                    let type_key;
-                    let reference = match *key {
-                        Constant::String(ref s) => s,
-                        Constant::Prefab(ref fab) => {
-                            type_key = dm::ast::FormatTreePath(&fab.path).to_string();
-                            type_key.as_str()
-                        },
-                        _ => continue,
-                    };
-                    output.push(Atom::from(objtree.expect(reference)));
+        if atom.istype("/obj/effect/spawner/structure/") || atom.istype("/obj/effect/spawner/window/") {
+            match atom.get_var("spawn_list", objtree) {
+                Constant::List(elements) => {
+                    for (key, _) in elements.iter() {
+                        // TODO: use a more civilized lookup method
+                        let type_key;
+                        let reference = match *key {
+                            Constant::String(ref s) => s,
+                            Constant::Prefab(ref fab) => {
+                                type_key = dm::ast::FormatTreePath(&fab.path).to_string();
+                                type_key.as_str()
+                            },
+                            _ => continue,
+                        };
+                        output.push(Atom::from(objtree.expect(reference)));
+                    }
+                    return false;  // don't include the original atom
                 }
-                false  // don't include the original atom
+                _ => { return true }  // TODO: complain?
             }
-            _ => { true }  // TODO: complain?
-        }
+        } return true;
     }
 }
 
