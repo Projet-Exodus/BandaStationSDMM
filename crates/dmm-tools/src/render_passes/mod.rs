@@ -554,6 +554,7 @@ impl RenderPass for BandaStationMods {
                 "/obj/structure/platform",
                 "/obj/machinery/door",
                 "/obj/effect/turf_decal",
+                "/obj/effect/spawner/window",
                 "/obj/effect/spawner/structure/window",
             ];
 
@@ -585,22 +586,28 @@ impl RenderPass for BandaStationMods {
         return true;
     }
 
-    // Replace falsewall with real one.
+    // Replace fake/mapping atoms with real ones
     fn expand<'a>(&self,
         atom: &Atom<'a>,
         objtree: &'a ObjectTree,
         output: &mut Vec<Atom<'a>>,
     ) -> bool {
-        if !atom.istype("/obj/structure/falsewall/") {
-            return true;
-        }
-        match atom.get_var("walltype", objtree) {
-            Constant::Prefab(prefab) => {
-                let reference = dm::ast::FormatTreePath(&prefab.path).to_string();
-                output.push(Atom::from(objtree.expect(reference.as_str())));
-                false
+        if atom.istype("/obj/structure/falsewall/") {
+            match atom.get_var("walltype", objtree) {
+                Constant::Prefab(prefab) => {
+                    let reference = dm::ast::FormatTreePath(&prefab.path).to_string();
+                    output.push(Atom::from(objtree.expect(reference.as_str())));
+                    return false;
+                }
+                _ => { return true }
             }
-            _ => { true }
+        } else if atom.istype("/turf/simulated/floor/lava/mapping_lava/") {
+            output.push(Atom::from(objtree.expect("/turf/simulated/floor/lava/lava_land_surface")));
+            return false;
+        } else if atom.istype("/turf/simulated/mineral/random/high_chance/") {
+            output.push(Atom::from(objtree.expect("/turf/simulated/mineral")));
+            return false;
         }
+        return true;
     }
 }
