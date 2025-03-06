@@ -545,6 +545,14 @@ pub struct BandaStationMods;
 impl RenderPass for BandaStationMods {
     fn path_filter(&self, path: &str) -> bool {
         if subpath(path, "/obj/") {
+            let guaranteed_removals = [
+                "/obj/effect/turf_decal/weather/",
+            ];
+
+            if guaranteed_removals.iter().any(|&p| subpath(path, p)) {
+                return false;
+            }
+
             let exceptions = [
                 "/obj/structure/window/",
                 "/obj/structure/lattice/",
@@ -566,12 +574,17 @@ impl RenderPass for BandaStationMods {
         if subpath(path, "/turf/") {
             let removals = [
                 "/turf/open/genturf/",
-                "/turf/closed/mineral/",
-                "/turf/open/lava/plasma/",
+                "/turf/closed/mineral/random/snow/",
+                "/turf/closed/mineral/snowmountain/",
+                "/turf/closed/mineral/random/labormineral/",
                 "/turf/open/floor/plating/snowed/icemoon/",
                 "/turf/open/floor/plating/snowed/smoothed/",
+                "/turf/open/lava/plasma/",
                 "/turf/open/cliff/snowrock/",
-                "/turf/open/misc/asteroid/",
+                "/turf/open/misc/ice/",
+                "/turf/open/misc/snow/",
+                "/turf/open/misc/asteroid/snow/",
+
             ];
 
             if removals.iter().any(|&p| subpath(path, p)) {
@@ -607,7 +620,26 @@ impl RenderPass for BandaStationMods {
         } else if atom.istype("/turf/simulated/mineral/random/high_chance/") {
             output.push(Atom::from(objtree.expect("/turf/simulated/mineral")));
             return false;
+            // Make all mineral turfs look the same
+        } else if atom.istype("/turf/closed/mineral/") {
+            output.push(Atom::from(objtree.expect("/turf/closed/mineral/minimap")));
+            return false;
         }
         return true;
+    }
+
+    fn adjust_sprite<'a>(&self,
+        atom: &Atom<'a>,
+        sprite: &mut Sprite<'a>,
+        _objtree: &'a ObjectTree,
+        _bump: &'a bumpalo::Bump,
+    ) {
+        if atom.istype("/turf/simulated/floor/grass/") && !atom.get_path().contains("no_creep") {
+            sprite.ofs_x -= 8;
+            sprite.ofs_y -= 8;
+        } else if atom.istype("/turf/closed/mineral/") {
+            sprite.ofs_x = 0;
+            sprite.ofs_y = 0;
+        }
     }
 }
