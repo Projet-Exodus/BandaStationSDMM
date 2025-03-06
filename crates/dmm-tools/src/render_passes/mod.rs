@@ -576,7 +576,7 @@ impl RenderPass for BandaStationMods {
                 "/turf/open/genturf/",
                 "/turf/closed/mineral/random/snow/",
                 "/turf/closed/mineral/snowmountain/",
-                "/turf/closed/mineral/random/labormineral/",
+                "/turf/closed/mineral/random/labormineral/ice/",
                 "/turf/open/floor/plating/snowed/icemoon/",
                 "/turf/open/floor/plating/snowed/smoothed/",
                 "/turf/open/lava/plasma/",
@@ -634,7 +634,7 @@ impl RenderPass for BandaStationMods {
         _objtree: &'a ObjectTree,
         _bump: &'a bumpalo::Bump,
     ) {
-        if atom.istype("/turf/simulated/floor/grass/") && !atom.get_path().contains("no_creep") {
+        if atom.istype("/turf/simulated/floor/grass/") || atom.istype("/turf/open/misc/grass/") && !atom.get_path().contains("no_creep") {
             sprite.ofs_x -= 8;
             sprite.ofs_y -= 8;
         } else if atom.istype("/turf/closed/mineral/") {
