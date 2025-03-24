@@ -21,14 +21,12 @@ const SOUTHEAST_JUNCTION: i32 = 1 << 5;
 const SOUTHWEST_JUNCTION: i32 = 1 << 6;
 const NORTHWEST_JUNCTION: i32 = 1 << 7;
 
-/// Smoothing system in where adjacencies are calculated and used to build an image by mounting each corner at runtime.
-const SMOOTH_CORNERS: i32 = 1 << 0;
 /// Smoothing system in where adjacencies are calculated and used to select a pre-baked icon_state, encoded by bitmasking.
-const SMOOTH_BITMASK: i32 = 1 << 1;
+const SMOOTH_BITMASK: i32 = 1 << 0;
 /// Atom has diagonal corners, with underlays under them.
-const SMOOTH_DIAGONAL_CORNERS: i32 = 1 << 2;
+const SMOOTH_DIAGONAL_CORNERS: i32 = 1 << 1;
 /// Atom will smooth with the borders of the map.
-const SMOOTH_BORDER: i32 = 1 << 3;
+const SMOOTH_BORDER: i32 = 1 << 2;
 
 pub struct IconSmoothing {
     pub mask: i32,
@@ -61,15 +59,7 @@ impl RenderPass for IconSmoothing {
         bump: &'a bumpalo::Bump,
     ) -> bool {
         let smooth_flags = self.mask & atom.get_var("smoothing_flags", objtree).to_int().unwrap_or(0);
-        if smooth_flags & SMOOTH_CORNERS != 0 {
-            let adjacencies = calculate_adjacencies(objtree, neighborhood, atom, smooth_flags);
-            if smooth_flags & SMOOTH_DIAGONAL_CORNERS != 0 {
-                diagonal_smooth(output, objtree, bump, neighborhood, atom, adjacencies);
-            } else {
-                cardinal_smooth(output, objtree, bump, atom, adjacencies);
-            }
-            false
-        } else if smooth_flags & SMOOTH_BITMASK != 0 {
+        if smooth_flags & SMOOTH_BITMASK != 0 {
             let adjacencies = calculate_adjacencies(objtree, neighborhood, atom, smooth_flags);
             bitmask_smooth(output, objtree, bump, neighborhood, atom, adjacencies, smooth_flags)
         } else {
