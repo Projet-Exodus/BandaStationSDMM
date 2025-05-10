@@ -1,14 +1,12 @@
-# SpacemanDMM
+# SpacemanDMM Modifié
 
-Этот репозиторй - форк оригинального [SpacemanDMM](https://github.com/SpaceManiac/SpacemanDMM), с некоторыми модификациями [отсюда](https://github.com/AffectedArc07/ParaSpacemanDMM).
-Все модификации кода направлены на использование dmm-tools в качестве рендера внутриигровых карт.
+Ce repository est une branche de l'original [SpacemanDMM](https://github.com/SpaceManiac/SpacemanDMM), avec quelques modifications de [ParaSpacemanDMM](https://github.com/AffectedArc07/ParaSpacemanDMM) et [BandaStationSDMM](https://github.com/ss220club/BandaStationSDMM). Toutes les modifications visent à utiliser dmm-tools comme outil pour le rendu des nanomaps, les cartes de taille réduite en jeu.
 
-Отличия от оригинала:
-- Добавлено сжатие рендеров карт с помощью [oxipng](https://github.com/shssoichiro/oxipng).
-Благодаря этому, рендеры карт весят ~3мб вместо 30мб, при родном разрешении рендера (8160х8160).
-- Из генерации убрана большая часть объектов и все мобы. А так же некоторые турфы. При этом всё ещё разрешены двери и декали на полу.
-- Из модификации AA07 была взята возможность задавать кастомный размер рендера, с помощью аргументов `--w` и `--h`.
-- dmm-tools переименовывается в nanomap-renderer при создании релиза.
+Differences avec l'original :
+- Ajout de la compression des rendus de carte à l'aide d'[oxipng](https://github.com/shssoichiro/oxipng). Grâce à cela, les rendus de carte pèsent environ 3 Mo au lieu de 30 Mo, avec la résolution de rendu native (8160x8160).
+- La plupart des objets et tous les monstres ont été supprimés de la génération. Et aussi quelques turfs. Les decals sur les portes et les planchers sont toutefois toujours autorisés.
+- Depuis les modifications d'AA07 modification, la possibilité de définir une taille de rendu personnalisée, avec les arguments `--w` et `--h`.
+- dmm-tools est renommé nanomap-renderer lors de la création d'une release.
 
 <hr>
 
